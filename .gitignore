@@ -9,6 +9,10 @@
 !ProjectSettings/
 !ProjectSettings/**
 
+# 保留 Packages 文件夹
+!Packages
+!Packages/**
+
 # 保留 .git 文件夹
 !.git/
 
