@@ -17,6 +17,7 @@ public class UnitAnimator : MonoBehaviour
         {
             moveAction.OnStartMoving += MoveAction_OnStartMoving;
             moveAction.OnStopMoving += MoveAction_OnStopMoving;
+            moveAction.OnChangedFloorsStarted += MoveAction_OnChangedFloorsStarted;
         }
 
         if (TryGetComponent<ShootAction>(out ShootAction shootAction))
@@ -46,6 +47,20 @@ public class UnitAnimator : MonoBehaviour
         animator.SetBool("IsWalking", false);
     }
 
+    private void MoveAction_OnChangedFloorsStarted(object sender, MoveAction.OnChangedFloorsStartedEventArgs e)
+    {
+        if (e.targetGridPosition.floor > e.unitGridPosition.floor)
+        {
+            // Jump
+            animator.SetTrigger("JumpUp");
+        }
+        else
+        {
+            // Drop
+            animator.SetTrigger("JumpDown");
+        }
+    }
+
     private void ShootAction_OnShoot(object sender, ShootAction.OnShootEventArgs e)
     {
         animator.SetTrigger("Shoot");
@@ -55,7 +70,8 @@ public class UnitAnimator : MonoBehaviour
 
         Vector3 targetUnitShootAtPosition = e.targetUnit.GetWorldPosition();
 
-        targetUnitShootAtPosition.y = shootPointTransform.position.y;
+        float unitShoulderHeight = 1.7f;
+        targetUnitShootAtPosition.y += unitShoulderHeight;
 
         bulletProjectile.Setup(targetUnitShootAtPosition);
     }

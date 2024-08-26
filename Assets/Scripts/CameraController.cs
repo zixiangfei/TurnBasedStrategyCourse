@@ -6,13 +6,19 @@ using Unity.Mathematics;
 
 public class CameraController : MonoBehaviour
 {
+    public static CameraController Instance { get; private set; }
 
     [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
     private const float MIN_FOLLOW_Y_OFFSET = 2f;
-    private const float MAX_FOLLOW_Y_OFFSET = 12f;
+    private const float MAX_FOLLOW_Y_OFFSET = 15f;
 
     private CinemachineTransposer cinemachineTransposer;
     private Vector3 targetFollowOffset;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void Start()
     {
@@ -57,5 +63,10 @@ public class CameraController : MonoBehaviour
 
         float zoomSpeed = 5f;
         cinemachineTransposer.m_FollowOffset = Vector3.Lerp(cinemachineTransposer.m_FollowOffset, targetFollowOffset, Time.deltaTime * zoomSpeed);
+    }
+
+    public float GetCameraHeight()
+    {
+        return targetFollowOffset.y;
     }
 }
